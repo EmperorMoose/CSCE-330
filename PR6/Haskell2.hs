@@ -1,5 +1,5 @@
+module Main where 
 import Debug.Trace
-
 --A. Pierce Matthews
 --11/28/17
 --CSCE-330 PR 6
@@ -10,11 +10,13 @@ import Debug.Trace
 sumdown 0 = 0
 sumdown n = n + sumdown (n-1)
 
-euclid :: (Int a) => a -> a -> a
-euclid a 0 = a
-euclid a b = euclid b (a 'mod' b)
+euclid :: (Integral a) => a -> a -> a
+euclid x y = euclid_ (abs x) (abs y)
+	where
+		euclid_ a 0 = a
+		euclid_ a b = euclid_ b (a `rem` b)
 
-sum' :: Num a => [a] ->
+sum' :: Num a => [a] -> a
 sum' [] = 0
 sum' (x:xs) = x + sum xs
 
@@ -29,20 +31,20 @@ last' (x:xs) = last xs
 dec2int' :: [Int] -> Int
 dec2int' = foldl (\x y -> 10*x + y) 0
 
-altMap :: (a -> b) -> (a -> b) -> [a] -> [b]
-altMap f g []       = []
-altMap f g (x:[])   = f x : []
-altMap f g (x:y:xs) = f x : g y : altMap f g xs
+altmap :: (a -> b) -> (a -> b) -> [a] -> [b]
+altmap f g []       = []
+altmap f g (x:[])   = f x : []
+altmap f g (x:y:xs) = f x : g y : altmap f g xs
 
 --define your own functions to help with luhn
 
 double :: Int -> Int
 double x = if n < 10 then n else n - 9
                where n = x*2
-mod :: Integral a => a -> Bool
-mod x = (mod x 10) == 0
+mod10 :: Integral a => a -> Bool
+mod10 x = (mod x 10) == 0
 luhn :: [Int] -> Bool
-luhn = mod . sum . (altMap double id)
+luhn = mod10 . sum . (altmap double id)
 
 
 score = s7_10+s7_9+s7_4+s6_9last+s6_9take+s6_9sum+s6_4+s6_2
