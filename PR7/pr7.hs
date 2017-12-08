@@ -2,28 +2,33 @@ module Main where
 import Data.Char
 import Debug.Trace
 import Data.List
+import Numeric
 
 --indexInto returns the index of the first argument in a list
 --(don't worry about error checking -- can assume in list)
 indexInto :: Eq a => a -> [a] -> Int
-indexInto x (y:ys) = elemIndices x (y:ys)
+indexInto x (y:ys) = loop' x (y:ys) 0
+    where loop' x (y:ys) n 
+            | x == y = n
+            | n == 10 = 0
+            | otherwise = loop' x (y:ys) n+1
 
 --converts a character into its corresponding integer value
 -- e.g. '0' to 0, 'A' to 10, 'Z' to 35
 -- like hex, except with more digits
 -- (consider using elem -- look it up)
 dig2Int :: Char -> Int
-dig2Int dChar = lookup dChar (zip ['0'..'9'] [0..9])
+dig2Int dChar = digitToInt dChar
 
 --converts an integer in range 0..35 into its
 -- corresponding digit (0,1..Z)
 -- again, don't care about ints out of bounds
 num2char :: Int -> Char
-num2char n = show n
+num2char n = intToDigit n
 
 --convert an integer into a binary number
 int2bin :: Int -> Int
-int2bin n = n `mod` 2 : int2bin (n `div` 2)
+int2bin n = 1
 
 --converts an integer value to a string representing
 -- the number in base b
@@ -31,9 +36,7 @@ int2bin n = n `mod` 2 : int2bin (n `div` 2)
 -- for how to convert base 10 to binary and
 -- then generalize
 int2Base :: Int -> Int -> String
-int2Base n b = int2Base' [] b where
-  int2Base' a 0 = a
-  int2Base' a b = int2Base' (r:a) q where (q,r) = b `divMod` n
+int2Base n b = "not done yet"
 
 --convert a number string in base b1 into an Int
 -- can assume input is valid
@@ -77,3 +80,4 @@ test3 msg f (arg1:args1) (arg2:args2) (arg3:args3) (expected:expecteds) value
   | otherwise = trace (msg ++ "on inputs "++ show arg1 ++" "++ show arg2++ " " ++ show arg3 ++" returned " ++ show result ++ ", expected " ++ show expected ) 0
     where
        result = f arg1 arg2 arg3
+
