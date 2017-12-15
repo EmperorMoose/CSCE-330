@@ -1,14 +1,17 @@
+--A. Pierce Matthews
+
 module Main where
 import Data.Char
 import Debug.Trace
 import Data.List
 import Numeric
+import Control.Monad
 
 --indexInto returns the index of the first argument in a list
 --(don't worry about error checking -- can assume in list)
 indexInto :: Eq a => a -> [a] -> Int
 indexInto x (y:ys) = loop' x (y:ys) 0
-    where loop' x (y:ys) n 
+    where loop' x (y:ys) n
             | x == y = n
             | n == 10 = 0
             | otherwise = loop' x (y:ys) n+1
@@ -28,7 +31,11 @@ num2char n = intToDigit n
 
 --convert an integer into a binary number
 int2bin :: Int -> Int
-int2bin n = 1
+int2bin 0 = 0;
+int2bin n
+  | (n `div` 2) == 0 = x
+  | otherwise = x + (n `mod` 2)
+    where x = 0
 
 --converts an integer value to a string representing
 -- the number in base b
@@ -80,4 +87,3 @@ test3 msg f (arg1:args1) (arg2:args2) (arg3:args3) (expected:expecteds) value
   | otherwise = trace (msg ++ "on inputs "++ show arg1 ++" "++ show arg2++ " " ++ show arg3 ++" returned " ++ show result ++ ", expected " ++ show expected ) 0
     where
        result = f arg1 arg2 arg3
-
